@@ -7,7 +7,7 @@
 
 {% for product in products %}
 
- 
+
 <div class="card" style="width: 18rem;">
     <img src="{{asset("uploads/"~product.image)}}" class="card-img-top" alt="...">
     <div class="card-body">
@@ -20,13 +20,19 @@
         <span>stock: </span> {{ product.stock }}
       </p>
       <form action="{{path("addToCart",{id:product.id})}}">
-          <input name="quantity" type="number" value="{{product.quantity}}"></input>
+          <input name="quantity" type="number" value="{{app.session.get("cart")[product.id]}}"></input>
           <button type="submit">submit</button>
         </form>
+{# value="{{ app.session.get("cart")[product.id] }}">
+<button type="submit" class="btn btn-secondary col-6">Mettre à jour</button>
+ {% else %}
+ value="1">
+<button type="submit" class="btn btn-secondary col-6">Ajouter au panier</button>
+ {% endif %} #}
     </div>
   </div>
    <a href="{{path("addToCart",{id:product.id})}}">add</a>
-    
+
   <br><br><br><br><br><br><br>
   {% endfor %}
 </div>
@@ -48,9 +54,9 @@
         </thead>
         <tbody>
         {% for product in products %}
-        bonjour 
+        bonjour
         <div>
-        <img src="{{asset("uploads/"~product.image)}}" alt=""> 
+        <img src="{{asset("uploads/"~product.image)}}" alt="">
 
         </div>
             <tr>

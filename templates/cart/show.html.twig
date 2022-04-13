@@ -22,7 +22,7 @@
       </p>
       <p class="card-text bg-light" style="transform: rotate(0);">
         <span>stock: </span> {{ product.stock }}
-        <form action="{{path("cartUpdate",{id:product.id})}}">
+        <form action="{{path("addToCart",{id:product.id})}}">
           <input name="quantity" type="number" value="{{product.quantity}}"></input>
           <button type="submit"></button>
         </form>

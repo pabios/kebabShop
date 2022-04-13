@@ -19,7 +19,7 @@ class CartController extends AbstractController
         $data = $session->get("cart",[]);
         //array_push($data, $product->getId());
         if(!empty($data[$product->getId()]) && $data[$product->getId()] > 0){
-            $data[$product->getId()] += $quantity;
+            $data[$product->getId()] = $quantity;
         }
         else{
             $data[$product->getId()] = $quantity;
