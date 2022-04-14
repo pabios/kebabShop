@@ -4,7 +4,15 @@
 
 {% block body %}
 <div class="container">
-
+<style>
+    .lesProduit{
+        display: flex;
+        background-color: red;
+        width: 100%;
+         
+    }
+</style>
+<div class="lesProduit" style="border:2px solid black;">
 {% for product in products %}
 
  
@@ -19,12 +27,25 @@
       <p class="card-text bg-light" style="transform: rotate(0);">
         <span>stock: </span> {{ product.stock }}
       </p>
+       
+
+      <form action="{{path("addToCart",{id:product.id})}}">
+        {% if app.session.get("cart")[product.id] is defined %}
+              <input class="form-control" name="quantity" type="number" value="{{app.session.get("cart")[product.id]}}"></input>
+        {% else %}
+              <input class="form-control" name="quantity" type="number" value="0"></input>
+        {% endif %}
+  
+            <button type="submit">submit</button>
+          </form>
+
     </div>
-  </div>
    <a href="{{path("addToCart",{id:product.id})}}">add</a>
+
+  </div>
     
-  <br><br><br><br><br><br><br>
   {% endfor %}
+  </div>
 </div>
 
     <h1>Product index</h1>

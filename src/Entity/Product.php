@@ -36,6 +36,9 @@ class Product
     #[ORM\Column(type: 'string', length: 255)]
     private $image;
 
+    private $quantity;
+     
+
     public function __construct()
     {
         $this->commandeDetails = new ArrayCollection();
@@ -147,4 +150,18 @@ class Product
 
         return $this;
     }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+     
 }

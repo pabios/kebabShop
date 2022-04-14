@@ -33,6 +33,7 @@ class ProductRepository extends ServiceEntityRepository
         }
     }
 
+
     /**
      * @throws ORMException
      * @throws OptimisticLockException
@@ -43,6 +44,16 @@ class ProductRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+    /* VERSION   */
+    public function productById($id)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.user', 'u', 'WITH', 'u.id = p.user')
+            ->andWhere('p.id LIKE  :id')
+            ->setParameter('id', "%" . $id . "%")
+            ->getQuery()
+            ->getResult();
     }
 
     // /**

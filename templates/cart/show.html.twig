@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CartController!{% endblock %}
+{% block title %}Panier{% endblock %}
 
 {% block body %}
 <style>
@@ -22,6 +22,14 @@
       </p>
       <p class="card-text bg-light" style="transform: rotate(0);">
         <span>stock: </span> {{ product.stock }}
+        <form action="{{path("addToCart",{id:product.id})}}">
+          <input name="quantity" type="number" value="{{product.quantity}}"></input>
+          <button type="submit">Modifier</button>
+        </form>
+        <form action="{{path("removeToCart",{id:product.id})}}">
+          <button type="submit">Supprimé</button>
+        </form>
+        <span>quantity: </span> {{product.quantity}}
       </p>
     </div>
   </div>
