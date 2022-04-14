@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product index{% endblock %}
+
+{% block body %}
+
+<div class="container">
+  <div class="py-5 text-center">
+    <img class="d-block mx-auto mb-4" src="https://image.shutterstock.com/image-vector/kebab-label-260nw-418110301.jpg" alt="" width="72" height="72">
+    <h2>Le bœuf d'abord</h2>
+    <p class="lead">
+      Riche en vitamines, la viande de bœuf satisfait plus de 75 % des apports recommandés en vitamine B12. Les vitamines présentent dans la viande sont source d’énergie et favorisent la lutte contre le vieillissement.
+    </p>
+  </div>
+
+  <div class="row">
+    <div  class="col-md-8 order-md-1">
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Nos Kebab</span>
+        <span class="badge badge-secondary badge-pill">3</span>
+      </h4>
+         
+      {% for message in app.flashes("success") %}
+      <div class="alert alert-success" role="alert">
+          {{message}}
+      </div>
+      {% endfor %}
+      <div class="lesproduits">
+      {% for product in products %}
+
+       <div class="card produit" style="width: 18rem;">
+          <img src="{{asset("uploads/"~product.image)}}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title"> {{ product.name }}</h5>
+            <p class="card-text">{{ product.description | raw }}</p>
+            <p class="card-text">
+              <a href="#" class="stretched-link text-danger" style="position: relative;"><span>Prix:</span> {{ product.price}}</a>
+            </p>
+            <p class="card-text bg-light" style="transform: rotate(0);">
+              <span>stock: </span> {{ product.stock }}
+            </p>
+            <form action="{{path("addToCart",{id:product.id})}}" method= "GET">
+            {% if app.session.get("cart")[product.id] is defined %}
+                  <input  class="form-control" name="quantity" type="number" class="qty" id="quantity{{product.id}}" value="{{app.session.get("cart")[product.id]}}"></input>
+            {% else %}
+                  <input class="form-control" name="quantity" type="number" class="qty" id="quantity{{product.id}}" value="1"></input>
+            {% endif %}
+
+            <button type="submit" id="{{product.id}}" class="btn btn-primary btn-lg btn-block">ajouter</button>
+          </form>
+  
+        </div>
+      </div>
+      
+
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="col-md-4 order-md-2 mb-4">
+      <h4 class="mb-3 text-muted"  >Filtrer</h4>
+      <form class="needs-validation" novalidate>
+        <hr class="mb-4">
+
+        <h4 class="mb-3">Categorie</h4>
+
+        <div class="d-block my-3">
+          <div class="custom-control custom-radio">
+            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+            <label class="custom-control-label" for="credit">Nature</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+            <label class="custom-control-label" for="debit">kosto</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
+            <label class="custom-control-label" for="paypal">big</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="cc-name">Prix min.</label>
+            <input type="text" class="form-control" id="cc-name" placeholder="" required>
+            <small class="text-muted">exemple: 10</small>
+            <div class="invalid-feedback">
+              Name on card is required
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cc-number">Prix max.</label>
+            <input type="text" class="form-control" id="cc-number" placeholder="" required>
+            <div class="invalid-feedback">
+              Credit card number is required
+            </div>
+          </div>
+        </div>
+         
+        <hr class="mb-4">
+        <button class="btn btn-primary btn-lg btn-block" type="submit">Mettre a jour</button>
+      </form>
+    </div>
+    
+  </div>
+
+  
+</div>
+
+
+<style>
+  .lesproduits{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+    flex-direction: row;
+  }
+  .produit{
+    margin : auto;
+    
+  }
+</style>
+<!-- encienne versionn-->
+
+ 
+
+  
+{% endblock %}
