@@ -5,20 +5,40 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/product')]
 class ProductController extends AbstractController
 {
     #[Route('/', name: 'app_product_index', methods: ['GET'])]
-    public function index(ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository, SessionInterface $session): Response
     {
+        // $data = $session->get("cart",[]);
+        // $quantityTotal = 0;
+        // foreach($data as $key => $value){
+        //     $quantityTotal += $value;
+
+        // }
+        $data = $session->get("cart",[]);
+        $quantityTotal = 0;
+        foreach($data as $key => $value){
+            $quantityTotal += $value;
+
+        }
         return $this->render('product/index.html.twig', [
             'products' => $productRepository->findAll(),
+            'quantityTotal' => $quantityTotal
         ]);
+
+        return $this->render('product/index.html.twig', [
+            'products' => $productRepository->findAll(),
+        //    'quantityTotal' => $quantityTotal
+        ]);
+        
     }
 
     #[Route('/new', name: 'app_product_new', methods: ['GET', 'POST'])]

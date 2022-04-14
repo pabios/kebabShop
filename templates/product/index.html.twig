@@ -3,83 +3,59 @@
 {% block title %}Product index{% endblock %}
 
 {% block body %}
+
 <div class="container">
-
-{% for product in products %}
-
-
-<div class="card" style="width: 18rem;">
-    <img src="{{asset("uploads/"~product.image)}}" class="card-img-top" alt="...">
-    <div class="card-body">
-      <h5 class="card-title"> {{ product.name }}</h5>
-      <p class="card-text">{{ product.description | raw }}</p>
-      <p class="card-text">
-        <a href="#" class="stretched-link text-danger" style="position: relative;"><span>Prix:</span> {{ product.price}}</a>
-      </p>
-      <p class="card-text bg-light" style="transform: rotate(0);">
-        <span>stock: </span> {{ product.stock }}
-      </p>
-      <form action="{{path("addToCart",{id:product.id})}}">
-          <input name="quantity" type="number" value="{{app.session.get("cart")[product.id]}}"></input>
-          <button type="submit">submit</button>
-        </form>
-{# value="{{ app.session.get("cart")[product.id] }}">
-<button type="submit" class="btn btn-secondary col-6">Mettre à jour</button>
- {% else %}
- value="1">
-<button type="submit" class="btn btn-secondary col-6">Ajouter au panier</button>
- {% endif %} #}
-    </div>
-  </div>
-   <a href="{{path("addToCart",{id:product.id})}}">add</a>
-
-  <br><br><br><br><br><br><br>
-  {% endfor %}
+<style>
+  .lesproduits{
+    display: flex;
+    width: 100%
+    flex-direction: row;
+  }
+  .produit{
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
+{% for message in app.flashes("success") %}
+<div class="alert alert-success" role="alert">
+    {{message}}
 </div>
+{% endfor %}
+<div class="lesproduits">
+  {% for product in products %}
 
-    <h1>Product index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Price</th>
-                <th>Description</th>
-                <th>Name</th>
-                <th>Stock</th>
-                <th>Slug</th>
-                <th>Image</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for product in products %}
-        bonjour
-        <div>
-        <img src="{{asset("uploads/"~product.image)}}" alt="">
-
-        </div>
-            <tr>
-                <td>{{ product.id }}</td>
-                <td>{{ product.price }}</td>
-                <td>{{ product.description |raw }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.stock }}</td>
-                <td>{{ product.slug }}</td>
-                <td>{{ product.image }}</td>
-                <td>
-                    <a href="{{ path('app_product_show', {'id': product.id}) }}">show</a>
-                    <a href="{{ path('app_product_edit', {'id': product.id}) }}">edit</a>
-                </td>
-
-            </tr>
+  <div class="card produit" style="width: 18rem;">
+      <img src="{{asset("uploads/"~product.image)}}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title"> {{ product.name }}</h5>
+        <p class="card-text">{{ product.description | raw }}</p>
+        <p class="card-text">
+          <a href="#" class="stretched-link text-danger" style="position: relative;"><span>Prix:</span> {{ product.price}}</a>
+        </p>
+        <p class="card-text bg-light" style="transform: rotate(0);">
+          <span>stock: </span> {{ product.stock }}
+        </p>
+        <form action="{{path("addToCart",{id:product.id})}}" method= "GET">
+        {% if app.session.get("cart")[product.id] is defined %}
+              <input name="quantity" type="number" class="qty" id="quantity{{product.id}}" value="{{app.session.get("cart")[product.id]}}"></input>
         {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+              <input name="quantity" type="number" class="qty" id="quantity{{product.id}}" value="0"></input>
+        {% endif %}
 
-    <a href="{{ path('app_product_new') }}">Create new</a>
+            <button type="submit" id="{{product.id}}" class="button">add</button>
+          </form>
+  {# value="{{ app.session.get("cart")[product.id] }}">
+  <button type="submit" class="btn btn-secondary col-6">Mettre à jour</button>
+  {% else %}
+  value="1">
+  <button type="submit" class="btn btn-secondary col-6">Ajouter au panier</button>
+  {% endif %} #}
+      </div>
+    </div>
+    {# <a href="{{path("addToCart",{id:product.id})}}">add</a> #}
+
+    {% endfor %}
+  </div>
+</div>
+  
 {% endblock %}

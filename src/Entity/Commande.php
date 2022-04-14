@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\CommandeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Client;
+use App\Entity\CommandeDetails;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CommandeRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 class Commande
@@ -122,12 +124,12 @@ class Commande
         return $this;
     }
 
-    public function getIdClient(): ?client
+    public function getIdClient(): ?Client
     {
         return $this->id_client;
     }
 
-    public function setIdClient(?client $id_client): self
+    public function setIdClient(?Client $id_client): self
     {
         $this->id_client = $id_client;
 

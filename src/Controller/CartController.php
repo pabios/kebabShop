@@ -15,6 +15,10 @@ class CartController extends AbstractController
     #[Route('/addToCart/{id}', name: 'addToCart')]
     public function index(SessionInterface $session,Product $product, Request $request): Response
     {
+        $this->addFlash(
+            'success',
+            'Produit bien ajouté au panier!'
+        );
         $quantity = $request->get("quantity");
         $data = $session->get("cart",[]);
         //array_push($data, $product->getId());
@@ -29,7 +33,7 @@ class CartController extends AbstractController
 
         //dd($data);
 
-        return $this->redirectToRoute('cart');
+        return $this->redirectToRoute('app_product_index');
 
         
     }
@@ -51,6 +55,24 @@ class CartController extends AbstractController
         return $this->render('cart/show.html.twig', [
             "products" => $products
         ]);
+    }
+
+    #[Route('/removeToCart/{id}', name: 'removeToCart')]
+    public function removeToCart(SessionInterface $session,Product $product, Request $request, int $id=0): Response
+    {
+    
+        
+        $data = $session->get("cart",[]);
+        unset($data[$product->getId()]);
+            
+        
+        $session->set("cart", $data);
+
+        //dd($data);
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);
+
+        
     }
 
 
