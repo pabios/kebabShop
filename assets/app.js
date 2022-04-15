@@ -13,7 +13,8 @@ import './styles/congrat.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 import './js/global.js';
-import './js/congrat'
+import './js/congrat';
+import './js/search';
 
 // ./src/js/app.js
     

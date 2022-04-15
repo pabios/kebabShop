@@ -1,5 +1,5 @@
-$(window).on("load",function(){
+// $(window).on("load",function(){
 	
-	setTimeout(function(){$('.done').addClass("drawn");},500)
+// 	setTimeout(function(){$('.done').addClass("drawn");},500)
 	
-});
+// });

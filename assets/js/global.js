@@ -10,9 +10,35 @@ document.addEventListener("DOMContentLoaded", function(){
     let info = document.querySelector('#info');
     let voir = document.querySelector('#voir');
     let vider = document.querySelector('#vider');
+    let form = document.querySelector('#form');
+    let resultat = document.querySelector('#resultat');
+    
+    /* function search(){
+        //e.preventDefault();
+          fetch('http://127.0.0.1:8003/apiSearch')
+          .then(res => {
+              if(res.ok){
+                 return res.json()
+              }
+          })
+          .then(data =>{
+              console.log(data)
+             
+              for(dat of data){
+                  resultat.innerHTML +=`<p> ${dat}</p>`
+              }
+              }
+         )
+         .catch(e => {
+             console.log('erreur de lecture api'+e);
+         })
+     }
+     form.addEventListener('keyup',search,false)
+     */
     
     
-    fetch('http://127.0.0.1:8003/quantity/')
+
+    fetch('http://localhost:8003/quantity')
     .then(res => {
         if(res.ok){
             return res.json()
@@ -36,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function(){
             e.preventDefault();
             console.log(this.id);
             fetch('http://127.0.0.1:8003/addToCart/'+this.id+"?quantity="+document.querySelector("#quantity"+this.id).value)
-            setQuantity();
+            //setQuantity();
 
         });
     }
