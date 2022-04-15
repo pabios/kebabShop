@@ -34,6 +34,9 @@ class OrderController extends AbstractController
         $order = new Commande();
         $entityManager = $doctrine->getManager();
 
+        
+
+
         foreach ($session->get("cart", []) as $id => $quantity) {
             if($quantity > 0){
                 //$productsInOrder[$id] = $quantity;
@@ -45,6 +48,17 @@ class OrderController extends AbstractController
                 $orderLine->setIdCommande($order);
                 $entityManager->persist($orderLine);
             }
+
+            $tabForStripe[] = [
+                'price_data' => [
+                  'currency' => 'eur',
+                  'product_data' => [
+                    'name' => $productRepo->find($id)->getName(),
+                  ],
+                  'unit_amount' => $productRepo->find($id)->getPrice(),
+                ],
+                'quantity' => $productRepo->find($id)->getQuantity(),
+            ];
         }
 
         $client = $doctrine->getRepository(Client::class)->find(1);
@@ -60,7 +74,10 @@ class OrderController extends AbstractController
         $entityManager->flush();
 
         // debut payment
-
+        $token=bin2hex(random_bytes(10));
+        $session->get("tokent_payment",[]);
+        $session->set("token_payment",$token);
+        
         $KEY = 'sk_test_51KolJoBRSFPeMdBtN3q6oO0GbOTKhdgOuiCgOlPk0qAOliz1YEP0WfWYcMh00LR5nh0o0deNglFGySUXaFFjBmB800CbbK3oAm';
         \Stripe\Stripe::setApiKey($KEY);
         $session = \Stripe\Checkout\Session::create([
@@ -74,21 +91,14 @@ class OrderController extends AbstractController
               ],
               'quantity' => 1,
             ],
-            [
-                'price_data' => [
-                  'currency' => 'eur',
-                  'product_data' => [
-                    'name' => 'Confiture',
-                  ],
-                  'unit_amount' => 3000,
-                ],
-                'quantity' => 2,
-              ]],
+             $tabForStripe
+            ],
             'mode' => 'payment',
-            'success_url' => 'http://localhost:8004/checkout',
-            'cancel_url' => 'http://localhost:8004/checkout'
+            'success_url' => "http://localhost:8003/checkoutSuccess/%12.$token",
+            'cancel_url' => 'http://localhost:8003/checkoutSuccess'
           ]);
 
+          
 
    return $this->redirect($session->url, 303);
 
@@ -99,9 +109,9 @@ class OrderController extends AbstractController
 
 
         // pour cote template
-        $totalPrice =$totalPrice;
-        $id = $orderLine->getIdCommande();
-        $laDate = $order->getCreationDate();
+        //$totalPrice =$totalPrice;
+       // $id = $orderLine->getIdCommande();
+       // $laDate = $order->getCreationDate();
         
         //dd($totalPrice);
   /*
@@ -112,4 +122,27 @@ class OrderController extends AbstractController
         ]);
     */
     }
+
+    #[Route('/checkoutSuccess/{token}', name: 'checkoutSuccess',methods: ['GET', 'POST'])]
+    public function succes( SessionInterface $session,$token){
+        
+
+        $session->get('token_payment',[]);
+        
+        // @TODO  faire un if token = get token par exemple 
+        // puis passer commande ici
+
+        //var_dump($session->get('token_payment',[]));
+        //dd($token);
+        
+        $laDate = new DateTime();
+        return $this->renderForm('order/index.html.twig', [
+            'totalPrice'=>100000,
+            'id' => 1,
+            'laDate' => $laDate
+       ]);
+    }
+
+
+
 }
