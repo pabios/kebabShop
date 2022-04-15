@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTime;
+use Stripe\Stripe;
 use App\Entity\Post;
 use App\Entity\Client;
 use App\Entity\Commande;
@@ -58,6 +59,44 @@ class OrderController extends AbstractController
 
         $entityManager->flush();
 
+        // debut payment
+
+        $KEY = 'sk_test_51KolJoBRSFPeMdBtN3q6oO0GbOTKhdgOuiCgOlPk0qAOliz1YEP0WfWYcMh00LR5nh0o0deNglFGySUXaFFjBmB800CbbK3oAm';
+        \Stripe\Stripe::setApiKey($KEY);
+        $session = \Stripe\Checkout\Session::create([
+            'line_items' => [[
+              'price_data' => [
+                'currency' => 'eur',
+                'product_data' => [
+                  'name' => 'T-shirt',
+                ],
+                'unit_amount' => 2000,
+              ],
+              'quantity' => 1,
+            ],
+            [
+                'price_data' => [
+                  'currency' => 'eur',
+                  'product_data' => [
+                    'name' => 'Confiture',
+                  ],
+                  'unit_amount' => 3000,
+                ],
+                'quantity' => 2,
+              ]],
+            'mode' => 'payment',
+            'success_url' => 'http://localhost:8004/checkout',
+            'cancel_url' => 'http://localhost:8004/checkout'
+          ]);
+
+
+   return $this->redirect($session->url, 303);
+
+
+
+
+
+
 
         // pour cote template
         $totalPrice =$totalPrice;
@@ -65,11 +104,12 @@ class OrderController extends AbstractController
         $laDate = $order->getCreationDate();
         
         //dd($totalPrice);
-
+  /*
         return $this->renderForm('order/index.html.twig', [
              'totalPrice'=>$totalPrice,
              'id' => $id,
              'laDate' => $laDate
         ]);
+    */
     }
 }

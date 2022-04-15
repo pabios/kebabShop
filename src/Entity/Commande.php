@@ -29,7 +29,7 @@ class Commande
     #[ORM\Column(type: 'integer')]
     private $total_price;
 
-    #[ORM\OneToMany(mappedBy: 'id_commande', targetEntity: CommandeDetails::class)]
+    #[ORM\OneToMany(mappedBy: 'id_commande', targetEntity: CommandeDetails::class,cascade:['remove'])]
     private $commandeDetails;
 
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'commandes')]

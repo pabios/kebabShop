@@ -41,10 +41,11 @@
         </p>
       </div>
     </div>
-    <a href="{{path("addToCart",{id:product.id})}}">+</a>
+    <!-- <a href="{{path("addToCart",{id:product.id})}}">+</a> -->
   </div>
-  <a class="btn btn-primary" href="{{path("checkout_order",{id:product.id})}}">commander</a>
   {% endfor %}
 </div>
+<a class="btn btn-primary" href="{{path("checkout_order")}}">commander</a>
+
 
 {% endblock %}

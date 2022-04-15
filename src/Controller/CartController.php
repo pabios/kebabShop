@@ -60,20 +60,50 @@ class CartController extends AbstractController
     #[Route('/removeToCart/{id}', name: 'removeToCart')]
     public function removeToCart(SessionInterface $session,Product $product, Request $request, int $id=0): Response
     {
-    
-        
         $data = $session->get("cart",[]);
         unset($data[$product->getId()]);
-            
-        
         $session->set("cart", $data);
 
         //dd($data);
         $referer = $request->headers->get('referer');
-        return $this->redirect($referer);
-
-        
+        return $this->redirect($referer);        
     }
+
+    #[Route('/vider', name: 'vider')]
+    public function vider(SessionInterface $session): Response
+    {
+        //dd($session->get("cart",[]));
+        $data = $session->get("cart",[]);
+        $session->set("cart", []);
+
+         
+        return $this->redirectToRoute('app_product_index');
+
+        //return new Response(0);
+    }
+
+    #[Route('/quantity', name: 'quantity')]
+    public function panier(SessionInterface $session):Response 
+    {
+        $quantityTotal = 0;
+        $cart = $session->get('cart',[]);
+
+
+        foreach($cart as $id => $quantity){
+            $quantityTotal += $quantity;
+        }
+        //return new Response($quantityTotal);
+
+        $response = new Response();
+
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Access-Control-Allow-Origin', '*');
+
+        $response->setContent(json_encode($quantityTotal,JSON_PRETTY_PRINT));
+        
+        return $response;
+    }
+
 
 
 
