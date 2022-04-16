@@ -78,7 +78,7 @@ class OrderController extends AbstractController
         $session->get("tokent_payment",[]);
         $session->set("token_payment",$token);
         
-        $KEY = 'sk_test_51KolJoBRSFPeMdBtN3q6oO0GbOTKhdgOuiCgOlPk0qAOliz1YEP0WfWYcMh00LR5nh0o0deNglFGySUXaFFjBmB800CbbK3oAm';
+        $KEY ='votre clef secrete depuis votre tableau de bord stripe ';
         \Stripe\Stripe::setApiKey($KEY);
         $session = \Stripe\Checkout\Session::create([
             'line_items' => [[
