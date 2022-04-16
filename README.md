@@ -26,6 +26,8 @@ Symfony c'est cooooooooool
 cd dossier
 git clone origin git@github.com:pabios/kebabShop.git
 composer install
+php bin/console doctrine:database:create
+php bin/console make:migration
 php bin/console doctrine:migrations:migrate
 symfony serve 
 // edit js
