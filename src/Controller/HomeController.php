@@ -19,6 +19,7 @@ class HomeController extends AbstractController
         ]);
     }
 
+    // autocompletion input search
     #[Route('/apiSearch', name: 'apiSearch')]
     public function search(Request $request, ProductRepository $productRepo): Response
     {
@@ -38,5 +39,26 @@ class HomeController extends AbstractController
             'products' => $allProduct
         ]);*/
     }
+
+    // submit search 
+    //@todo replace twig render by this
+    #[Route('/apiSearchSubmit', name: 'apiSearchSubmit')]
+    public function searchSubmit(Request $request, ProductRepository $productRepo): Response
+    {
+        $search= $request->query->get("search");
+        $allProduct = $productRepo->searchSubmit($search);
+         
+         
+        //dd($allProduct);
+
+        return new JsonResponse($allProduct); // un tableau d'objet
+
+        /*return $this->render('home/index.html.twig', [
+            'controller_name' => 'HomeController',
+            'products' => $allProduct
+        ]);*/
+    }
+
+
 
 }

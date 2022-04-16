@@ -1,55 +1,72 @@
-let resultat = document.querySelector('#resultat');
-let form = document.querySelector('#form');
-let datalist = document.querySelector('#datalist');
+document.addEventListener("DOMContentLoaded", function(){
 
+      let resultat = document.querySelector('#resultat');
+      let leInput = document.querySelector('#form');
+      let datalist = document.querySelector('#datalist');
 
-fetch('http://localhost:8003/apiSearch')
-    .then(res => {
-        if(res.ok){
-            return res.json()
+      // console log resultat apiSearch
+      fetch('http://localhost:8003/apiSearch')
+          .then(res => {
+              if(res.ok){
+                  return res.json()
+              }
+          })
+          .then(data =>{
+              // console.log(data)
+                return data;
+              }
+          )
+          function search(){
+            //e.preventDefault();
+              fetch('http://localhost:8003/apiSearch')
+              .then(res => {
+                  if(res.ok){
+                    return res.json()
+                  }
+              })
+              .then(datas =>{
+                  console.log(datas)
+                  console.log('est le resultat a suggerer ');
+
+                  //var aBlock = doc.createElement('block').appendChild(doc.createElement('b'));
+                    datalist.innerHTML = '';
+                    for(let data of datas){
+                        //resultat.innerHTML +=`<p> ${dat}</p>`
+                        datalist.innerHTML+=`<option value="${data}">${data}</option>`
+                    }
+                  }
+            )
+            .catch(e => {
+                console.log('erreur de lecture api'+e);
+            })
         }
-    })
-    .then(data =>{
-          console.log(data)
+        leInput.addEventListener('keyup',search,false)
 
-          for(rep of data){
-            //resultat.innerHTML += `<p> ${rep} </p>`;
-          } 
-          /*nb.innerHTML += data;
-          if(data >0){
-             info.innerHTML = `<p> votre panier contient ${data} kebab </p>`;
-             voir.innerHTML = `<p class="badge bg-secondary">voir</p>`
-             vider.innerHTML = `  <p class="badge bg-secondary">vider</p>`
-          }else{
-            info.innerHTML = `<p> votre panier est vide </p>`;
-          } */
-          return data;
-        }
-    )
 
-     
+          // debut submit
+        function searchSubmit(e){
+          e.preventDefault();
+            fetch('http://localhost:8003/apiSearchSubmit')
+            .then(res => {
+                if(res.ok){
+                  return res.json()
+                }
+            })
+            .then(data =>{
+              console.log('est le resultat a afficher ');
 
-    function search(){
-      //e.preventDefault();
-        fetch('http://localhost:8003/apiSearch')
-        .then(res => {
-            if(res.ok){
-               return res.json()
-            }
-        })
-        .then(data =>{
-            console.log(data)
+                console.log(data)
 
-            //var aBlock = doc.createElement('block').appendChild(doc.createElement('b'));
-          datalist.innerHTML = '';
-            for(let dat of data){
-                //resultat.innerHTML +=`<p> ${dat}</p>`
-                datalist.innerHTML+=`<option value="${dat}">${dat}</option>`
-            }
-            }
-       )
-       .catch(e => {
-           console.log('erreur de lecture api'+e);
-       })
-   }
-   form.addEventListener('keyup',search,false)
+              //var aBlock = doc.createElement('block').appendChild(doc.createElement('b'));
+              //datalist.innerHTML = '';
+                  for(let dat of data){
+                      resultat.innerHTML +=`<p> ${dat}</p>`
+                  }
+                }
+          )
+          .catch(e => {
+              console.log('erreur de lecture api'+e);
+          })
+      }
+      form.addEventListener('submit',searchSubmit,false)
+});

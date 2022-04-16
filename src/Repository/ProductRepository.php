@@ -47,10 +47,10 @@ class ProductRepository extends ServiceEntityRepository
 
     
 
-    // /**
-    //  * @return Product[] Returns an array of Product objects
-    //  */
-    
+     
+    /**
+     * search pour input autocompletion
+     */
     public function search($name)
     {
         return $this->createQueryBuilder('p')
@@ -58,6 +58,21 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('name','%'.$name.'%')
             ->orderBy('p.id', 'ASC')
             ->setMaxResults(5)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * search pour form recherche sumbit
+     */
+    public function searchSubmit($name)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.name LIKE :name')
+            ->setParameter('name','%'.$name.'%')
+            ->orderBy('p.id', 'ASC')
+            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
